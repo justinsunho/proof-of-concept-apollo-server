@@ -25,7 +25,14 @@ const DeleteButton = ({ selectedItems }) => {
     window.location.reload(false);
   };
 
-  return <button onClick={handleClick}>Delete Selected Items</button>;
+  return (
+    <button
+      className="f6 link dim ba ph3 pv2 mb2 dib dark-pink"
+      onClick={handleClick}
+    >
+      Delete Selected Items
+    </button>
+  );
 };
 
 export default DeleteButton;

@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { TableEntry, TableHeader } from "../../atoms";
 
-const Table = ({ entryData, titleData, handleSelectedItems, selected }) => {
+const Table = ({
+  entryData,
+  titleData,
+  handleSelectedItems,
+  setSelectedItemsGetter,
+}) => {
   const [allToggle, setAllToggle] = useState(false);
 
   return (
@@ -14,7 +19,7 @@ const Table = ({ entryData, titleData, handleSelectedItems, selected }) => {
             handleSelectedItems={handleSelectedItems}
             allToggle={allToggle}
             key={item.title}
-            selected={selected}
+            setSelectedItemsGetter={setSelectedItemsGetter}
           />
         ))}
       </tbody>

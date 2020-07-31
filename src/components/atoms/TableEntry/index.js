@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-const TableEntry = ({ data, allToggle, selected }) => {
+const TableEntry = ({ data, allToggle, setSelectedItemsGetter }) => {
   const [checked, setChecked] = useState(false);
   const [prevAllToggle, setPreviousAllTogle] = useState(allToggle);
 
@@ -18,9 +18,9 @@ const TableEntry = ({ data, allToggle, selected }) => {
     nutritionInfo: { calories, fat, carb, protein },
   } = data;
 
-  if (checked === true) {
-    selected(title);
-  }
+  useEffect(() => {
+    setSelectedItemsGetter(title, checked);
+  }, [checked]);
 
   return (
     <tr>

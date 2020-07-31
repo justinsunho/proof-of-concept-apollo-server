@@ -42,23 +42,40 @@ const AddEntryForm = ({ titleData }) => {
     },
   });
 
+  const validate = (value) => {
+    let error;
+    if (!value) {
+      error = "Required";
+    }
+    return error;
+  };
+
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form className="measure center" onSubmit={formik.handleSubmit}>
       {titleData.map(({ name, index }) => {
         return (
           <>
-            <label htmlFor="">{name}</label>
+            <label className="db fw6 lh-copy f6" htmlFor="">
+              {name}
+            </label>
             <input
+              className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
               id={name}
               name={name}
               type="text"
               onChange={formik.handleChange}
               value={formik.values[name]}
+              validate={validate}
             />
           </>
         );
       })}
-      <button type="submit">Submit</button>
+      <button
+        className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+        type="submit"
+      >
+        Submit
+      </button>
     </form>
   );
 };
