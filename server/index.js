@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server-express");
+const { ApolloServer, gql, MockList } = require("apollo-server-express");
 const express = require("express");
 
 // A schema is a collection of type definitions (hence "typeDefs")
@@ -21,9 +21,21 @@ const typeDefs = gql`
     desserts: [Dessert]
     nutritionInfo: [NutritionInfo]
   }
+
+  input NutritionInfoInput {
+    calories: Int
+    fat: Int
+    carb: Int
+    protein: Int
+  }
+
+  type Mutation {
+    createDessert(title: String, input: NutritionInfoInput): Dessert
+    deleteDessert(title: String): Dessert
+  }
 `;
 
-const desserts = [
+let desserts = [
   {
     title: "Snickers",
     nutritionInfo: {
@@ -33,6 +45,24 @@ const desserts = [
       protein: 4,
     },
   },
+  {
+    title: "Oreo",
+    nutritionInfo: {
+      calories: 400,
+      fat: 34,
+      carb: 1,
+      protein: 100,
+    },
+  },
+  {
+    title: "lollipop",
+    nutritionInfo: {
+      calories: 53,
+      fat: 444,
+      carb: 4,
+      protein: 43,
+    },
+  },
 ];
 
 const resolvers = {
@@ -40,14 +70,46 @@ const resolvers = {
     desserts: () => desserts,
     nutritionInfo: () => desserts.nutritionInfo,
   },
+  Mutation: {
+    createDessert: (_, { title, input }, context) => {
+      const { calories, fat, carb, protein } = input;
+
+      const dessert = {
+        title: title,
+        nutritionInfo: {
+          calories: calories,
+          fat: fat,
+          carb: carb,
+          protein: protein,
+        },
+      };
+
+      desserts.push(dessert);
+
+      console.log(dessert);
+
+      return dessert;
+    },
+    deleteDessert: (_, { title }, context) => {
+      const deleteItem = desserts.find((element) => element.title === title);
+
+      desserts = desserts.filter((item) => item !== deleteItem);
+      return deleteItem;
+    },
+  },
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  introspection: true,
+  persistedQueries: true,
+});
 
 const app = express();
 
 server.applyMiddleware({ app });
 
-app.listen({ port: 4000 }, () =>
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+app.listen({ port: 8080 }, () =>
+  console.log(`🚀 Server ready at http://localhost:8080${server.graphqlPath}`)
 );
