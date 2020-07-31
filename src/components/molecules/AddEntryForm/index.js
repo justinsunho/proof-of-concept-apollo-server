@@ -1,7 +1,6 @@
 import React from "react";
 import { useFormik } from "formik";
 import { gql, useMutation } from "@apollo/client";
-import { useHistory } from "react-router-dom";
 
 const ADD_ITEM = gql`
   mutation CreateDessert($title: String, $input: NutritionInfoInput) {
@@ -17,9 +16,8 @@ const ADD_ITEM = gql`
   }
 `;
 
-const AddEntryForm = ({ titleData }) => {
-  const [addItem, { data }] = useMutation(ADD_ITEM);
-  const history = useHistory();
+const AddEntryForm = (titleData) => {
+  const [addItem] = useMutation(ADD_ITEM);
 
   const formik = useFormik({
     initialValues: {},
@@ -52,7 +50,7 @@ const AddEntryForm = ({ titleData }) => {
 
   return (
     <form className="measure center" onSubmit={formik.handleSubmit}>
-      {titleData.map(({ name, index }) => {
+      {titleData.map((name) => {
         return (
           <>
             <label className="db fw6 lh-copy f6" htmlFor="">
